@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<style>
+	body {
+	  
+	}
+</style>
+
+<!-- jQuery 2.2.4 -->
+<script>
+	var key = "ab90a10ff5b266ae2955c6d1a48a1aa7";
+	$(document).ready(function() {
+	  alert("This website will use your location to view the local weather.")
+	  if (navigator.geolocation) {
+	    // if the user agrees, call showWeather().
+	    // if user agrees but there's an erro for .getLocation(), apiError() displays error
+	    navigator.geolocation.getLocation(showWeather, apiError)
+	  } else {
+	    alert("Your settings don't seem to support finding your location. Please refresh the page and click agree to the location prompt that appears. If no prompt showed up the first time, you might have to use a different browser.")
+	  }
+	});
+
+	// Use ajax to put new information in <div> sections
+	function showWeather(coords) {
+	  $.ajax({
+	    url: "api.openweathermap.org/data/2.5/weather?lat="+coords.latitude+"&lon="+coords.longitude+"&appid=" + key,
+	    success: function(weatherData){
+	      $("#weatherType").html(weatherData["weather"]["description"]);
+	    }
+	  });
+	};
+
+	// API error handling function. Shows unique error depending on error type
+	function apiError(error) {
+	  switch (error.code) {
+	    case error.PERMISSION_DENIED:
+	      alert("Permission denied.");
+	      break;
+	    case error.POSITION_UNAVAILABLE:
+	      alert("No position available.");
+	      break;
+	    case error.TIME_OUT:
+	      alert("Timed out when making request.");
+	      break;
+	    case error.UNKNOWN_ERROR:
+	      alert("Error of unknown type.");
+	      break;
+	  }
+	};
+</script>
+
+<html>
+	<head></head>
+	<body>
+	  <h1>Local Weather Forecast</h1>
+	  <div id="weatherType">Test1</div>
+	  <div id="temperature">Test2</div>
+	  <div id="tempMax">Test3</div>
+	  <div id="tempMin">Test4</div>
+	</body>
+</html>
