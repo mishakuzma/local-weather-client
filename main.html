@@ -2,7 +2,11 @@
 
 <style>
 	body {
-	  
+  		background-color: #99e6e6;
+	}
+
+	h1 {
+  		font-family: 'Baloo Bhaina', cursive;
 	}
 </style>
 
@@ -13,21 +17,31 @@
 	  alert("This website will use your location to view the local weather.")
 	  if (navigator.geolocation) {
 	    // if the user agrees, call showWeather().
-	    // if user agrees but there's an erro for .getLocation(), apiError() displays error
-	    navigator.geolocation.getLocation(showWeather, apiError)
+	    // if user agrees but there's an error for .getLocation(), apiError() displays error
+	    navigator.geolocation.getCurrentPosition(showWeather, apiError)
 	  } else {
 	    alert("Your settings don't seem to support finding your location. Please refresh the page and click agree to the location prompt that appears. If no prompt showed up the first time, you might have to use a different browser.")
 	  }
 	});
 
 	// Use ajax to put new information in <div> sections
-	function showWeather(coords) {
-	  $.ajax({
-	    url: "api.openweathermap.org/data/2.5/weather?lat="+coords.latitude+"&lon="+coords.longitude+"&appid=" + key,
-	    success: function(weatherData){
-	      $("#weatherType").html(weatherData["weather"]["description"]);
-	    }
+	function showWeather(position) {
+	  alert(position.coords.latitude + " " + position.coords.longitude);
+	  $.getJSON("http://www.api.openweathermap.org/data/2.5/weather?lat="+ position.coords.latitude + "&lon="+ position.coords.longitude + "&appid=ab90a10ff5b266ae2955c6d1a48a1aa7", function(weatherData){
+	    alert(JSON.stringify(weatherData));
 	  });
+	  /*
+	  $.ajax({
+	    url: "https://www.api.openweathermap.org/data/2.5/weather?lat="+ position.coords.latitude + "&lon="+ position.coords.longitude + "&appid=ab90a10ff5b266ae2955c6d1a48a1aa7",
+	    success: function(weatherData){
+	      $("#weatherType").html(weatherData[0]["weather"]["description"]);
+	    },
+	    error: function(objectRet){
+	      alert(JSON.stringify(objectRet));
+	    }
+	    
+	  });
+	  */
 	};
 
 	// API error handling function. Shows unique error depending on error type
@@ -49,13 +63,21 @@
 	};
 </script>
 
+<!-- Google font: Baloo Bhaina-->
+<link href="https://fonts.googleapis.com/css?family=Baloo+Bhaina" rel="stylesheet">
+
 <html>
 	<head></head>
 	<body>
-	  <h1>Local Weather Forecast</h1>
-	  <div id="weatherType">Test1</div>
-	  <div id="temperature">Test2</div>
-	  <div id="tempMax">Test3</div>
-	  <div id="tempMin">Test4</div>
+	  <div class="container">
+	    <h1 class="row text-center">Local Weather Forecast</h1>
+	    <div id="weatherType">Test1</div>
+	    <div id="temperature">Test2</div>
+	    <div id="tempMax">Test3</div>
+	    <div id="tempMin">Test4</div>
+	    <div id="tempButtons" class="text-center">
+	      <button id = "converterButton" class="btn btn-primary"></button>
+	    </div>
+	  </div>
 	</body>
 </html>
