@@ -13,35 +13,32 @@
 <!-- jQuery 2.2.4 -->
 <script>
 	var key = "ab90a10ff5b266ae2955c6d1a48a1aa7";
+	var lat, lon;
 	$(document).ready(function() {
 	  alert("This website will use your location to view the local weather.")
-	  if (navigator.geolocation) {
-	    // if the user agrees, call showWeather().
-	    // if user agrees but there's an error for .getLocation(), apiError() displays error
-	    navigator.geolocation.getCurrentPosition(showWeather, apiError)
-	  } else {
-	    alert("Your settings don't seem to support finding your location. Please refresh the page and click agree to the location prompt that appears. If no prompt showed up the first time, you might have to use a different browser.")
-	  }
+	  $.ajax({
+	    url:"http://ip-api.com/json",
+	    success: function(inLocat){showWeather(inLocat)},
+	    error: alert("Nope")
+	  });
+	   
 	});
 
 	// Use ajax to put new information in <div> sections
-	function showWeather(position) {
-	  alert(position.coords.latitude + " " + position.coords.longitude);
-	  $.getJSON("http://www.api.openweathermap.org/data/2.5/weather?lat="+ position.coords.latitude + "&lon="+ position.coords.longitude + "&appid=ab90a10ff5b266ae2955c6d1a48a1aa7", function(weatherData){
-	    alert(JSON.stringify(weatherData));
-	  });
-	  /*
+	function showWeather(inLocat) {
+	  alert(inLocat["lat"] + " " + inLocat["lon"]);
 	  $.ajax({
-	    url: "https://www.api.openweathermap.org/data/2.5/weather?lat="+ position.coords.latitude + "&lon="+ position.coords.longitude + "&appid=ab90a10ff5b266ae2955c6d1a48a1aa7",
+	    url: "http://api.openweathermap.org/data/2.5/weather?lat="+ inLocat["lat"] + "&lon="+ inLocat["lon"] + "&APPID=ab90a10ff5b266ae2955c6d1a48a1aa7",
 	    success: function(weatherData){
-	      $("#weatherType").html(weatherData[0]["weather"]["description"]);
+	      console.log(JSON.stringify(weatherData));
+	      $("#weatherType").html(JSON.stringify(weatherData["weather"][0]["description"]));
 	    },
 	    error: function(objectRet){
-	      alert(JSON.stringify(objectRet));
+	      console.log(JSON.stringify(objectRet));
 	    }
 	    
 	  });
-	  */
+	  
 	};
 
 	// API error handling function. Shows unique error depending on error type
