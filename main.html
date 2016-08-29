@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 
 <style>
-	body {
-  		background-color: #99e6e6;
-	}
+  body {
+    background-color: #99e6e6;
+    background-size: 100% 100%;
+  }
+  .fancyFont {
+    font-family: 'Baloo Bhaina', cursive;
+  }
+  #weatherType {
+    background-color: brown;
+    border-radius: 25px;
+  }
 
-	h1 {
-  		font-family: 'Baloo Bhaina', cursive;
-	}
+  #temperatureInfo {
+    background-color: green;
+    border-radius: 25px;
+  }
+  h1 {
+    font-family: 'Baloo Bhaina', cursive;
+  }
 </style>
 
 <!-- jQuery 2.2.4 -->
 <script>
-	// Must be run using http
+// Must be run using http
 var key = "ab90a10ff5b266ae2955c6d1a48a1aa7";
 var unitType = false;
 $(document).ready(function() {
@@ -51,10 +63,10 @@ function showWeather(inLocat) {
       url: "http://api.openweathermap.org/data/2.5/weather?lat=" + inLocat["lat"] + "&lon=" + inLocat["lon"] + "&units=imperial" + "&APPID=ab90a10ff5b266ae2955c6d1a48a1aa7",
       success: function(weatherData) {
         console.log(JSON.stringify(weatherData));
-        $("#weatherType").html(weatherData["weather"][0]["description"]);
-        $("#temperature").html(weatherData["main"]["temp"]);
-        $("#tempMax").html(weatherData["main"]["temp_max"]);
-        $("#tempMin").html(weatherData["main"]["temp_min"]);
+        $("#condition").html(weatherData["weather"][0]["description"]);
+        $("#temperature").html(weatherData["main"]["temp"] + "°F");
+        $("#tempMax").html(weatherData["main"]["temp_max"] + "°F");
+        $("#tempMin").html(weatherData["main"]["temp_min"] + "°F");
         $("#converterButton").html("To celsius.")
         imgRequest(JSON.stringify(weatherData["weather"][0]["description"]));
       },
@@ -68,10 +80,10 @@ function showWeather(inLocat) {
       url: "http://api.openweathermap.org/data/2.5/weather?lat=" + inLocat["lat"] + "&lon=" + inLocat["lon"] + "&units=metric" + "&APPID=ab90a10ff5b266ae2955c6d1a48a1aa7",
       success: function(weatherData) {
         console.log(JSON.stringify(weatherData));
-        $("#weatherType").html(weatherData["weather"][0]["description"]);
-        $("#temperature").html(weatherData["main"]["temp"]);
-        $("#tempMax").html(weatherData["main"]["temp_max"]);
-        $("#tempMin").html(weatherData["main"]["temp_min"]);
+        $("#condition").html(weatherData["weather"][0]["description"]);
+        $("#temperature").html(weatherData["main"]["temp"] + "°C");
+        $("#tempMax").html(weatherData["main"]["temp_max"] + "°C");
+        $("#tempMin").html(weatherData["main"]["temp_min"] + "°C");
         $("#converterButton").html("To fahrenheit.")
         imgRequest(JSON.stringify(weatherData["weather"][0]["description"]));
       },
@@ -84,23 +96,6 @@ function showWeather(inLocat) {
 
 };
 
-// API error handling function. Shows unique error depending on error type
-function apiError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      alert("Permission denied.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      alert("No position available.");
-      break;
-    case error.TIME_OUT:
-      alert("Timed out when making request.");
-      break;
-    case error.UNKNOWN_ERROR:
-      alert("Error of unknown type.");
-      break;
-  }
-};
 
 // Image request function
 // Takes a string to describe weather, and returns an image depicting the weather.
@@ -120,17 +115,27 @@ function imgRequest(descript) {
 
 <html>
 	<head></head>
-	<body>
-	  <div class="container">
-	    <h1 class="row text-center">Local Weather Forecast</h1>
-	    <div id="weatherType">Test1</div>
-	    <div id="temperature">Test2</div>
-	    <div id="tempMax">Test3</div>
-	    <div id="tempMin">Test4</div>
-	    <div id="tempButtons" class="text-center">
-	      <button id = "converterButton" class="btn btn-primary"></button>
-	    </div>
-	  </div>
-	  <p>Images brought to you by Pixabay</p>
-	</body>
+  <body>
+    <div class="container">
+      <h1 class="row text-center">Local Weather Forecast</h1>
+      <div class="row">
+
+        <div id="weatherType" class="col-xs-6 text-center">
+          <p class="fancyFont">Weather Right Now: </p>
+          <div id="condition"> Test </div>
+        </div>
+        <div class="col-xs-6" id="temperatureInfo">
+          <p class="fancyFont">Current Temp: </p>
+          <div id="temperature">Test2</div>
+          <p class="fancyFont">Maximum Temp: </p>
+          <div id="tempMax">Test3</div>
+          <p class="fancyFont">Minimum Temp: </p>
+          <div id="tempMin">Test4</div>
+          <button id="converterButton" class="btn btn-primary"></button>
+        </div>
+
+      </div>
+    </div>
+    <p>Images brought to you by Pixabay</p>
+  </body>
 </html>
