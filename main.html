@@ -104,7 +104,7 @@ function imgRequest(descript) {
   $.ajax({
     url: "http://pixabay.com/api/?key=" + key + "&q=" + encodeURIComponent(descript) + "&image_type=photo&pretty=true",
     success: function(inJSON) {
-      $("body").css("background-image", "url(" + inJSON["hits"][0]["webformatURL"]) + ")";
+      $("body").css("background-image", "url(" + inJSON["hits"][0]["webformatURL"] + ")").fadeIn("fast");
     }
   });
 };
